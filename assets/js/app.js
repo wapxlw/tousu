@@ -259,8 +259,8 @@ var app = new Vue({
                 alert("请填写投诉内容")
                 return
             }
-            // 根据企业配置验证是否需要上传图片
-            if (this.requireImageUpload && this.upload_files.length === 0) {
+            // 图片上传为必填项
+            if (this.upload_files.length === 0) {
                 alert("请上传相关图片")
                 return
             }
