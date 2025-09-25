@@ -280,5 +280,4 @@ var app = new Vue({
         },
 
     }
-
 });
