@@ -98,34 +98,13 @@
                         </div>
                     </div>
                     
-                    <!-- 图片上传 -->
-                    <div class="weui-cells__group weui-cells__group_form" v-if="requireImageUpload">
+                    <!-- 图片上传（必填） -->
+                    <div class="weui-cells__group weui-cells__group_form">
                         <div class="weui-cell weui-cell_uploader">
                             <div class="weui-cell__bd">
                                 <div class="weui-uploader">
                                     <div class="weui-uploader__hd">
                                         <p class="weui-uploader__title">图片上传 <span class="required-mark">*</span></p>
-                                        <div class="weui-uploader__info">{{upload_files.length}}/9</div>
-                                    </div>
-                                    <div class="weui-uploader__bd">
-                                        <ul class="weui-uploader__files" id="uploaderFiles">
-                                            <li class="weui-uploader__file" :style="'background-image:url('+pic+')'" v-for="pic in upload_files"></li>
-                                        </ul>
-                                        <div class="weui-uploader__input-box">
-                                            <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple @change="toUpload"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="weui-cells__group weui-cells__group_form" v-else>
-                        <div class="weui-cell weui-cell_uploader">
-                            <div class="weui-cell__bd">
-                                <div class="weui-uploader">
-                                    <div class="weui-uploader__hd">
-                                        <p class="weui-uploader__title">图片上传（可选）</p>
                                         <div class="weui-uploader__info">{{upload_files.length}}/9</div>
                                     </div>
                                     <div class="weui-uploader__bd">
