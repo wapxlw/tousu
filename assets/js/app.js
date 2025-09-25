@@ -33,16 +33,13 @@ function isValidMobileNumber(phoneNumber) {
 // 跳转到投诉须知
 function go_know(){
     // 跳转到投诉须知页面
-    var currentPath = window.location.pathname;
-    var noticeUrl;
+    const currentUrl = new URL(window.location);
+    const urlParams = currentUrl.searchParams;
     
-    // 处理GitHub Pages路径结构
-    if (currentPath.endsWith('/')) {
-        noticeUrl = currentPath + 'notice';
-    } else {
-        noticeUrl = currentPath + '/notice';
-    }
+    // 保持原有参数，添加notice参数
+    urlParams.set('page', 'notice');
     
+    const noticeUrl = currentUrl.origin + currentUrl.pathname + '?' + urlParams.toString();
     console.log('跳转到投诉须知:', noticeUrl);
     window.location.href = noticeUrl;
 }
@@ -93,7 +90,9 @@ var app = new Vue({
         valid: true,
         allList: [],
         // 从后端获取企业配置：是否需要上传图片
-        requireImageUpload: true
+        requireImageUpload: true,
+        // 页面状态管理
+        currentPage: 'complaint' // 'complaint' 或 'notice'
     },
     mounted() {
         this.time = new Date().getTime();
@@ -118,21 +117,38 @@ var app = new Vue({
         // 解析URL参数
         parseUrlParams() {
             const pathParts = window.location.pathname.split('/').filter(part => part);
-            console.log('路径解析调试:', pathParts);
+            const urlParams = new URLSearchParams(window.location.search);
             
-            // GitHub Pages路径格式: /tousu/ENT20250911NSBWN3CZ/REMpPIuh2c
-            // pathParts = ['tousu', 'ENT20250911NSBWN3CZ', 'REMpPIuh2c']
-            if (pathParts.length >= 3 && pathParts[0] === 'tousu') {
-                // 跳过仓库路径 'tousu'，取后面的企业ID和通道SN
-                this.enterpriseId = pathParts[1];  // ENT20250911NSBWN3CZ
-                this.sn = pathParts[2];            // REMpPIuh2c
+            console.log('路径解析调试:', pathParts);
+            console.log('URL参数调试:', window.location.search);
+            
+            // 检查页面类型
+            if (urlParams.has('page') && urlParams.get('page') === 'notice') {
+                this.currentPage = 'notice';
+            } else {
+                this.currentPage = 'complaint';
+            }
+            
+            // 优先使用URL参数（更可靠）
+            if (urlParams.has('e') && urlParams.has('c')) {
+                // 简洁参数形式: ?e=ENT20250911NSBWN3CZ&c=REMpPIuh2c
+                this.enterpriseId = urlParams.get('e');
+                this.sn = urlParams.get('c');
+            } else if (urlParams.has('enterprise') && urlParams.has('channel')) {
+                // 完整参数形式: ?enterprise=ENT20250911NSBWN3CZ&channel=REMpPIuh2c
+                this.enterpriseId = urlParams.get('enterprise');
+                this.sn = urlParams.get('channel');
+            } else if (pathParts.length >= 3 && pathParts[0] === 'tousu') {
+                // 回退到路径解析: /tousu/ENT20250911NSBWN3CZ/REMpPIuh2c
+                this.enterpriseId = pathParts[1];
+                this.sn = pathParts[2];
             } else if (pathParts.length >= 2) {
                 // 兼容直接路径: /企业ID/通道SN
                 this.enterpriseId = pathParts[0];
                 this.sn = pathParts[1];
             }
             
-            console.log('解析结果 - 企业ID:', this.enterpriseId, '通道SN:', this.sn);
+            console.log('解析结果 - 企业ID:', this.enterpriseId, '通道SN:', this.sn, '页面:', this.currentPage);
         },
         
         // 加载投诉类型
