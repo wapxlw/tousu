@@ -33,8 +33,17 @@ function isValidMobileNumber(phoneNumber) {
 // 跳转到投诉须知
 function go_know(){
     // 跳转到投诉须知页面
-    var currentUrl = window.location.pathname;
-    var noticeUrl = currentUrl + '/notice';
+    var currentPath = window.location.pathname;
+    var noticeUrl;
+    
+    // 处理GitHub Pages路径结构
+    if (currentPath.endsWith('/')) {
+        noticeUrl = currentPath + 'notice';
+    } else {
+        noticeUrl = currentPath + '/notice';
+    }
+    
+    console.log('跳转到投诉须知:', noticeUrl);
     window.location.href = noticeUrl;
 }
 
@@ -109,10 +118,21 @@ var app = new Vue({
         // 解析URL参数
         parseUrlParams() {
             const pathParts = window.location.pathname.split('/').filter(part => part);
-            if (pathParts.length >= 2) {
+            console.log('路径解析调试:', pathParts);
+            
+            // GitHub Pages路径格式: /tousu/ENT20250911NSBWN3CZ/REMpPIuh2c
+            // pathParts = ['tousu', 'ENT20250911NSBWN3CZ', 'REMpPIuh2c']
+            if (pathParts.length >= 3 && pathParts[0] === 'tousu') {
+                // 跳过仓库路径 'tousu'，取后面的企业ID和通道SN
+                this.enterpriseId = pathParts[1];  // ENT20250911NSBWN3CZ
+                this.sn = pathParts[2];            // REMpPIuh2c
+            } else if (pathParts.length >= 2) {
+                // 兼容直接路径: /企业ID/通道SN
                 this.enterpriseId = pathParts[0];
                 this.sn = pathParts[1];
             }
+            
+            console.log('解析结果 - 企业ID:', this.enterpriseId, '通道SN:', this.sn);
         },
         
         // 加载投诉类型
