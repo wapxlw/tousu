@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可信企业展示 - 使用示例</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 { color: #333; }
+        .example-box {
+            background: #f5f7fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #1a73e8;
+        }
+        code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #e83e8c;
+            font-family: 'Courier New', monospace;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1a73e8;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #1557b0;
+        }
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            border: 2px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏅 可信企业展示页面 - 使用示例</h1>
+    
+    <div class="example-box">
+        <h2>📱 移动端访问示例</h2>
+        <p>使用手机扫描二维码或直接访问链接查看可信企业认证信息</p>
+        
+        <h3>示例企业链ID：</h3>
+        <code>TE68329CA7AE70877B5189A51</code>
+        
+        <h3>访问链接格式：</h3>
+        <ul>
+            <li>
+                <strong>Hash模式（推荐）：</strong><br>
+                <code>https://your-domain.github.io/trusted.html#/TE68329CA7AE70877B5189A51</code>
+            </li>
+            <li>
+                <strong>查询参数模式：</strong><br>
+                <code>https://your-domain.github.io/trusted.html?chain_id=TE68329CA7AE70877B5189A51</code>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="example-box">
+        <h2>🔗 如何获取分享链接</h2>
+        <ol>
+            <li>登录admin后台</li>
+            <li>进入"可信企业"菜单</li>
+            <li>点击企业的"详情"按钮</li>
+            <li>在详情弹窗中找到"分享链接"</li>
+            <li>点击"📋 复制"按钮</li>
+        </ol>
+    </div>
+    
+    <div class="example-box">
+        <h2>💡 应用场景</h2>
+        <ul>
+            <li>在企业官网展示认证信息</li>
+            <li>在微信公众号文章中插入链接</li>
+            <li>生成二维码供客户扫描</li>
+            <li>在企业宣传资料中使用</li>
+            <li>在电子名片中展示</li>
+        </ul>
+    </div>
+    
+    <div class="example-box">
+        <h2>🎨 页面预览特性</h2>
+        <ul>
+            <li>✨ 金色认证徽章，彰显企业可信身份</li>
+            <li>📋 完整的企业基本信息展示</li>
+            <li>📄 详细的主体证件信息</li>
+            <li>📝 企业认定说明文字</li>
+            <li>📱 完美适配移动端设备</li>
+            <li>🎯 专业的视觉设计</li>
+        </ul>
+    </div>
+    
+    <div class="example-box">
+        <h2>⚙️ 配置步骤</h2>
+        <ol>
+            <li>修改 <code>config.js</code> 中的 <code>API_BASE_URL</code></li>
+            <li>修改 <code>assets/js/trusted_enterprises.js</code> 中的 GitHub Pages URL</li>
+            <li>部署到 GitHub Pages 或你的服务器</li>
+            <li>在后台创建可信企业信息</li>
+            <li>复制分享链接并分享给客户</li>
+        </ol>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="trusted.html#/TE68329CA7AE70877B5189A51" class="btn">查看演示页面</a>
+        <a href="TRUSTED_DEPLOYMENT.md" class="btn" style="background: #6c757d;">部署文档</a>
+    </div>
+    
+    <hr style="margin: 40px 0; border: none; border-top: 1px solid #eee;">
+    
+    <div style="text-align: center; color: #666; font-size: 14px;">
+        <p>💡 提示：实际使用前请先配置后端API地址</p>
+        <p>📖 详细说明请查看 <a href="TRUSTED_DEPLOYMENT.md">TRUSTED_DEPLOYMENT.md</a></p>
+    </div>
+</body>
+</html>

@@ -40,23 +40,6 @@
 </head>
 <body data-weui-theme="light">
     <div id="app" v-cloak>
-        <!-- 投诉须知页面 -->
-        <div v-if="currentPage === 'notice'">
-            <div style="text-align:center;margin-top:40px">
-                <h2>投诉须知</h2>
-            </div>
-            <div style="font-size:19px;margin:45px 5px 0px 5px;">
-                你应保证你的投诉行为基于善意，并代表你本人真实意思。作为中立的平台服务者，收到你投诉后，会尽快按照相关法律法规的规定独立判断并进行处理。我们将会采取合理的措施保护你的个人信息；除法律法规规定的情形外，未经用户许可不会向第三方公开、透露你的个人信息。<br>
-                <p></p>
-                根据《中华人民共和国民法典》的规定，权利人在通知网络服务提供者时应当提供权利人的真实身份信息。因此，当你提交侵权投诉及冒充他人投诉时，我们根据你的主体类型，收集你的相关信息<span style="font-weight: 600;margin: 0; padding: 0;">（含敏感个人信息），包括你的姓名或名称、证件号码或者组织证件号、证件正反面照片、公司或组织证件照片，收集前述内容的目的在于核验你的身份信息的真实性。如果你委托代理人进行投诉，我们还将收集代理人的<span style="text-decoration: underline;">姓名</span>、<span style="text-decoration: underline;">证件号码</span>、<span style="text-decoration: underline;">证件正反面照片、授权委托书照片，</span></span>收集前述信息在于核验代理人信息的真实性。你可以拒绝提供，如果拒绝提供，我们可能无法对你的投诉进行评估，但不影响其他功能的正常使用。<br>
-            </div>
-            <div style="text-align: center; margin: 30px 0;">
-                <button onclick="backToComplaint()" style="background: #1976d2; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer;">开始投诉</button>
-            </div>
-        </div>
-        
-        <!-- 投诉表单页面 -->
-        <div v-else>
         <!-- 投诉表单页面 -->
         <div v-if="!submitSuccess">
             <!-- 投诉类型选择 -->
@@ -98,13 +81,34 @@
                         </div>
                     </div>
                     
-                    <!-- 图片上传（必填） -->
-                    <div class="weui-cells__group weui-cells__group_form">
+                    <!-- 图片上传 -->
+                    <div class="weui-cells__group weui-cells__group_form" v-if="requireImageUpload">
                         <div class="weui-cell weui-cell_uploader">
                             <div class="weui-cell__bd">
                                 <div class="weui-uploader">
                                     <div class="weui-uploader__hd">
-                                        <p class="weui-uploader__title">图片证据 <span class="required-mark">*</span></p>
+                                        <p class="weui-uploader__title">图片上传 <span class="required-mark">*</span></p>
+                                        <div class="weui-uploader__info">{{upload_files.length}}/9</div>
+                                    </div>
+                                    <div class="weui-uploader__bd">
+                                        <ul class="weui-uploader__files" id="uploaderFiles">
+                                            <li class="weui-uploader__file" :style="'background-image:url('+pic+')'" v-for="pic in upload_files"></li>
+                                        </ul>
+                                        <div class="weui-uploader__input-box">
+                                            <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple @change="toUpload"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="weui-cells__group weui-cells__group_form" v-else>
+                        <div class="weui-cell weui-cell_uploader">
+                            <div class="weui-cell__bd">
+                                <div class="weui-uploader">
+                                    <div class="weui-uploader__hd">
+                                        <p class="weui-uploader__title">图片上传（可选）</p>
                                         <div class="weui-uploader__info">{{upload_files.length}}/9</div>
                                     </div>
                                     <div class="weui-uploader__bd">
@@ -164,32 +168,9 @@
         </div>
     </div>
     
-    <script>
-        // GitHub Pages SPA路由处理
-        (function() {
-            var redirect = sessionStorage.getItem('redirect');
-            if (redirect) {
-                sessionStorage.removeItem('redirect');
-                history.replaceState(null, null, redirect);
-            }
-        })();
-        
-        // 返回投诉页面
-        function backToComplaint() {
-            const currentUrl = new URL(window.location);
-            const urlParams = currentUrl.searchParams;
-            
-            // 移除page参数，返回投诉页面
-            urlParams.delete('page');
-            
-            const complaintUrl = currentUrl.origin + currentUrl.pathname + '?' + urlParams.toString();
-            window.location.href = complaintUrl;
-        }
-    </script>
     <script src="./assets/js/vue.js"></script>
     <script src="./assets/js/jquery.min.js"></script>
     <script src="https://res2.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
     <script src="./assets/js/app.js"></script>
 </body>
 </html>
-
