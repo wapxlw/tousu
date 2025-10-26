@@ -147,11 +147,163 @@
             font-weight: 500;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
         }
         
         .action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* 弹窗蒙层 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        /* 弹窗主体 */
+        .modal {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 18px;
+            color: #333;
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 25px 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group label .required {
+            color: #ef4444;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        .btn-cancel:hover {
+            background: #e5e5e5;
+        }
+        
+        .btn-submit {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background: #059669;
+        }
+        
+        .btn-submit:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
         }
         
         /* 加载状态 */
@@ -312,9 +464,39 @@
             
             <!-- 底部操作按钮 -->
             <div class="footer-action">
-                <a href="javascript:void(0)" class="action-btn" onclick="applyTrusted()">
+                <button class="action-btn" onclick="openJoinModal()">
                     我也要加入可信企业 →
-                </a>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 加入可信企业弹窗 -->
+    <div id="joinModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>加入可信企业</h2>
+                <button class="modal-close" onclick="closeJoinModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="joinForm">
+                    <div class="form-group">
+                        <label>企业简称 <span class="required">*</span></label>
+                        <input type="text" id="enterpriseName" placeholder="请输入企业简称" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系人 <span class="required">*</span></label>
+                        <input type="text" id="contactPerson" placeholder="请输入联系人姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <label>联系电话 <span class="required">*</span></label>
+                        <input type="tel" id="contactPhone" placeholder="请输入11位手机号码" maxlength="11" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeJoinModal()">取消</button>
+                <button class="btn btn-submit" onclick="submitJoinForm()" id="submitBtn">提交</button>
             </div>
         </div>
     </div>
@@ -357,10 +539,103 @@
             return `${year}-${month}-${day}`;
         }
         
-        // 申请加入可信企业
+        // 申请加入可信企业（已废弃，改用弹窗）
         function applyTrusted() {
-            alert('请联系平台客服申请加入可信企业计划');
+            openJoinModal();
         }
+        
+        // 打开加入弹窗
+        function openJoinModal() {
+            document.getElementById('joinModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // 关闭加入弹窗
+        function closeJoinModal() {
+            document.getElementById('joinModal').classList.remove('active');
+            document.body.style.overflow = '';
+            // 重置表单
+            document.getElementById('joinForm').reset();
+        }
+        
+        // 提交加入表单
+        async function submitJoinForm() {
+            const enterpriseName = document.getElementById('enterpriseName').value.trim();
+            const contactPerson = document.getElementById('contactPerson').value.trim();
+            const contactPhone = document.getElementById('contactPhone').value.trim();
+            
+            // 验证必填项
+            if (!enterpriseName) {
+                alert('请输入企业简称');
+                return;
+            }
+            
+            if (!contactPerson) {
+                alert('请输入联系人');
+                return;
+            }
+            
+            if (!contactPhone) {
+                alert('请输入联系电话');
+                return;
+            }
+            
+            // 验证手机号格式
+            if (!/^1[3-9]\d{9}$/.test(contactPhone)) {
+                alert('请输入正确的手机号码');
+                return;
+            }
+            
+            // 禁用提交按钮
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '提交中...';
+            
+            try {
+                const apiBaseUrl = window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : '';
+                
+                if (!apiBaseUrl) {
+                    throw new Error('API地址未配置');
+                }
+                
+                const response = await fetch(`${apiBaseUrl}/api/submit_business_lead.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        enterprise_name: enterpriseName,
+                        contact_person: contactPerson,
+                        contact_phone: contactPhone
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    alert('提交成功！我们会尽快与您联系。');
+                    closeJoinModal();
+                } else {
+                    alert(result.msg || '提交失败，请稍后重试');
+                }
+            } catch (err) {
+                alert('提交失败：' + err.message);
+            } finally {
+                // 恢复提交按钮
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交';
+            }
+        }
+        
+        // 点击蒙层关闭弹窗
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('joinModal');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeJoinModal();
+                }
+            });
+        });
         
         // Vue应用
         new Vue({
